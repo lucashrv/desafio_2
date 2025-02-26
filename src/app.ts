@@ -1,5 +1,6 @@
 import express, { Application } from "express";
 import IndexRoutes from "./routes/routes";
+import connection from "./database/connection";
 import { config } from "dotenv";
 
 config();
@@ -24,8 +25,10 @@ class App {
     }
 
     public start(port: number): void {
-        this.app.listen(port, () => {
+        this.app.listen(port, async () => {
+            await connection.start();
             console.log(`Server started`);
+            console.log(`Connected to database`);
         });
     }
 }
