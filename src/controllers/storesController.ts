@@ -8,13 +8,16 @@ class StoresController {
         this.storesServices = new StoresServices();
     }
 
-    public say(req: Request, res: Response): Response {
+    public async create(req: Request, res: Response): Promise<Response> {
         try {
-            const hello: string = this.storesServices.say();
+            const store = await this.storesServices.createStore(req.body);
 
-            return res.status(200).json({ say: hello });
+            return res.status(201).json({
+                message: "Store criado com sucesso!",
+                data: store,
+            });
         } catch (err: any) {
-            return res.status(500).json({ error: "Internal server error" });
+            return res.status(500).json({ error: err.message });
         }
     }
 }

@@ -1,6 +1,13 @@
+import Store, { IStore } from "../../models/Store";
+
 class StoresServices {
-    public say(): string {
-        return "Hello World!";
+    public async createStore(body: IStore) {
+        const store = await Store.create({
+            ...body,
+            cep: body.cep.replace("-", ""),
+        });
+
+        return store;
     }
 }
 
