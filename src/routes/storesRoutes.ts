@@ -12,8 +12,8 @@ class StoresRoutes {
     }
 
     init(): Router {
-        this.routes.get("/test", (req, res) => {
-            this.storesController.say(req, res);
+        this.routes.post("/store", (req, res) => {
+            this.storesController.create(req, res);
         });
 
         return this.routes;

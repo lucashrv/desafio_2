@@ -12,12 +12,14 @@ class App {
     public constructor() {
         this.app = express();
         this.indexRoutes = new IndexRoutes();
-        this.routes();
         this.middlewares();
+        this.routes();
     }
 
     private middlewares(): void {
-        this.app.use(express.json({ limit: "5mb" }));
+        this.app.use(express.json({ limit: "10mb" }));
+        this.app.use(express.text({ limit: "100mb" }));
+        this.app.use(express.urlencoded({ limit: "10mb", extended: true }));
     }
 
     private routes(): void {
