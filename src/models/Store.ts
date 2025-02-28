@@ -2,33 +2,52 @@ import { Document, Schema, model } from "mongoose";
 import { validation as v } from "./../utils/validationMessages";
 
 export interface IStore extends Document {
-    nome: string;
-    cep: string;
-    logradouro: string;
-    numero: string | number;
-    bairro: string;
-    estado: string;
-    latitude: number;
-    longitude: number;
+    name: string;
+    address: {
+        zip_code: string;
+        street: string;
+        number: string | number;
+        neighborhood: string;
+        city: string;
+        state: string;
+        coordinates: {
+            lat: number;
+            lng: number;
+        };
+    };
 }
 
 const StoreSchema = new Schema<IStore>(
     {
-        nome: { type: String, required: [true, v.required("nome")] },
-        cep: {
-            type: String,
-            required: [true, v.required("cep")],
-            maxlength: [8, v.maxlength("cep", 8)],
+        name: { type: String, required: [true, v.required("name")] },
+        address: {
+            zip_code: {
+                type: String,
+                required: [true, v.required("zip_code")],
+                maxlength: [8, v.maxlength("zip_code", 8)],
+            },
+            street: {
+                type: String,
+                required: [true, v.required("street")],
+            },
+            number: { type: String, required: [true, v.required("number")] },
+            neighborhood: {
+                type: String,
+                required: [true, v.required("neighborhood")],
+            },
+            city: { type: String, required: [true, v.required("city")] },
+            state: { type: String, required: [true, v.required("state")] },
+            coordinates: {
+                lat: {
+                    type: Number,
+                    required: [true, v.required("coordinates.lat")],
+                },
+                lng: {
+                    type: Number,
+                    required: [true, v.required("coordinates.lng")],
+                },
+            },
         },
-        logradouro: {
-            type: String,
-            required: [true, v.required("logradouro")],
-        },
-        numero: { type: String, required: [true, v.required("numero")] },
-        bairro: { type: String, required: [true, v.required("bairro")] },
-        estado: { type: String, required: [true, v.required("estado")] },
-        latitude: { type: Number, required: [true, v.required("latitude")] },
-        longitude: { type: Number, required: [true, v.required("longitude")] },
     },
     {
         timestamps: true,
