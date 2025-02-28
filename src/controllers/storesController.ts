@@ -10,7 +10,7 @@ class StoresController {
 
     public async create(req: Request, res: Response): Promise<Response> {
         try {
-            const store = await this.storesServices.createStore(req.body);
+            const store = await this.storesServices.create(req.body);
 
             return res.status(201).json({
                 message: "Store criado com sucesso!",

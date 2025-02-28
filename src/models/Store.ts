@@ -3,8 +3,8 @@ import { validation as v } from "./../utils/validationMessages";
 
 export interface IStore extends Document {
     name: string;
+    zip_code: string;
     address: {
-        zip_code: string;
         street: string;
         number: string | number;
         neighborhood: string;
@@ -20,12 +20,12 @@ export interface IStore extends Document {
 const StoreSchema = new Schema<IStore>(
     {
         name: { type: String, required: [true, v.required("name")] },
+        zip_code: {
+            type: String,
+            required: [true, v.required("zip_code")],
+            maxlength: [8, v.maxlength("zip_code", 8)],
+        },
         address: {
-            zip_code: {
-                type: String,
-                required: [true, v.required("zip_code")],
-                maxlength: [8, v.maxlength("zip_code", 8)],
-            },
             street: {
                 type: String,
                 required: [true, v.required("street")],
