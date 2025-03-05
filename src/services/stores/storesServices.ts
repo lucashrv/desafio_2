@@ -1,5 +1,6 @@
 import axios from "axios";
 import Store, { IStore } from "../../models/Store";
+import AppError from "../../utils/AppError";
 
 class StoresServices {
     public async create(body: IStore) {
@@ -9,7 +10,7 @@ class StoresServices {
 
         const viaCep = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
 
-        if (viaCep.data.erro) throw new Error("Cep não localizado!");
+        if (viaCep.data.erro) throw new AppError("Cep não encontrado!", 404);
 
         console.log("ViaCep: ", viaCep.data);
 
@@ -18,8 +19,9 @@ class StoresServices {
         );
 
         if (!nominatim.data[0])
-            throw new Error(
-                "Localização não encontrada, confira o CEP e o Número!",
+            throw new AppError(
+                "Localização não encontrada, confira o CEP e o Número do local!",
+                404,
             );
 
         console.log("Nominatim: ", nominatim.data[0]);

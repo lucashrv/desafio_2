@@ -17,7 +17,8 @@ class StoresController {
                 data: store,
             });
         } catch (err: any) {
-            return res.status(500).json({ error: err.message });
+            const statusCode: number = err.statusCode || 500;
+            return res.status(statusCode).json({ error: err.message });
         }
     }
 }
