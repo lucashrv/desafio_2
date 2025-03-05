@@ -15,6 +15,9 @@ class StoresRoutes {
         this.routes.post("/store", (req, res) => {
             this.storesController.create(req, res);
         });
+        this.routes.get("/stores/:cep", (req, res) => {
+            this.storesController.searchNearbyStores(req, res);
+        });
 
         return this.routes;
     }
