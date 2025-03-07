@@ -9,6 +9,9 @@ class StoresServices {
 
         const cep = zip_code.replace("-", "");
 
+        if (cep.toString().length !== 8 || typeof +cep !== "number")
+            throw new AppError("O CEP precisa ser de 8 dígitos numéricos", 422);
+
         const viaCep = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
 
         if (viaCep.data.erro) throw new AppError("CEP não encontrado!", 404);
@@ -44,6 +47,19 @@ class StoresServices {
         });
 
         console.log("new store: ", store);
+
+        return store;
+    }
+
+    public async getAll() {
+        const stores = await Store.find();
+        return stores;
+    }
+
+    public async getOne(id: string) {
+        const store = await Store.findById(id);
+
+        if (!store) throw new AppError("Loja não encontrada!", 404);
 
         return store;
     }
@@ -96,6 +112,27 @@ class StoresServices {
             .sort((a, b) => a.distanceToCep - b.distanceToCep);
 
         return nearbyStores;
+    }
+
+    public async update(id: string, body: Partial<IStore>) {
+        const storeExists = await Store.findById(id);
+
+        if (!storeExists) throw new AppError("Loja não encontrada!", 404);
+
+        const store = await Store.findByIdAndUpdate(id, body, {
+            new: true,
+            runValidators: true,
+        });
+
+        return store;
+    }
+
+    public async delete(id: string) {
+        const storeExists = await Store.findById(id);
+
+        if (!storeExists) throw new AppError("Loja não encontrada!", 404);
+
+        return await Store.findByIdAndDelete(id);
     }
 }
 
