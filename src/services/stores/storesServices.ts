@@ -2,6 +2,7 @@ import axios from "axios";
 import Store, { IStore } from "../../models/Store";
 import AppError from "../../utils/AppError";
 import calcHaversineDistance from "../../utils/calcHaversineDistance";
+import logger from "../../utils/logger";
 
 class StoresServices {
     public async create(body: IStore) {
@@ -16,8 +17,6 @@ class StoresServices {
 
         if (viaCep.data.erro) throw new AppError("CEP não encontrado!", 404);
 
-        console.log("ViaCep: ", viaCep.data);
-
         const nominatim = await axios.get(
             `https://nominatim.openstreetmap.org/search?q=${viaCep.data.logradouro},${viaCep.data.bairro},${viaCep.data.localidade},${viaCep.data.uf},Brasil&format=json`,
         );
@@ -27,8 +26,6 @@ class StoresServices {
                 "Localização não encontrada, confira o CEP e o Número do local!",
                 404,
             );
-
-        console.log("Nominatim: ", nominatim.data[0]);
 
         const store = await Store.create({
             name,
@@ -45,8 +42,6 @@ class StoresServices {
                 },
             },
         });
-
-        console.log("new store: ", store);
 
         return store;
     }
@@ -78,8 +73,6 @@ class StoresServices {
 
         if (viaCep.data.erro) throw new AppError("CEP não encontrado!", 404);
 
-        console.log("ViaCep: ", viaCep.data);
-
         const nominatim = await axios.get(
             `https://nominatim.openstreetmap.org/search?q=${viaCep.data.logradouro},${viaCep.data.bairro},${viaCep.data.localidade},${viaCep.data.uf},Brasil&format=json`,
         );
@@ -89,8 +82,6 @@ class StoresServices {
                 "Localização não encontrada, confira o CEP",
                 404,
             );
-
-        console.log("Nominatim: ", nominatim.data[0]);
 
         const stores = await Store.find();
 
